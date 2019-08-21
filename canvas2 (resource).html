@@ -1,0 +1,149 @@
+<!doctype html>
+<head>
+    <title>game</title>
+</head>
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        var canvas, canvasContext;
+        
+        window.onload = function(){
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+           
+            for(var i = 0; i < brickCount; i++){
+                bricks.push(randBrick());  
+            }
+            
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
+            
+            setInterval(mainloop, 1000/50);
+        }
+        
+        // player vars 
+        var playerXpos = 0;
+        var playerYpos = 0;
+        var playerXspeed = 8;
+        var playerYspeed = 3;
+        var playerSize = 20;
+        
+        var brickCount = 10;
+        
+        var score = 0;
+        
+        var bricks = [];
+        
+        const LEFT_KEY = 37;
+        const RIGHT_KEY = 39;
+        var leftKeyPressed = false;
+        var rightKeyPressed = false;
+        
+        function mainloop(){
+            colorRect(0,0,canvas.width,canvas.height,'black'); // bg
+            colorRect(playerXpos,playerYpos,playerSize,playerSize,'red'); // player
+            
+            playerMove();
+            bricksDraw();
+            bricksMove();
+        }
+        
+        function keyPressed(evt){
+//            console.log(evt.keyCode);
+            if(evt.keyCode == LEFT_KEY){
+               leftKeyPressed = true;
+            }
+            if(evt.keyCode == RIGHT_KEY){
+               rightKeyPressed = true;
+            }
+        }
+        
+        function keyReleased(evt){
+             if(evt.keyCode == LEFT_KEY){
+               leftKeyPressed = false;
+            }
+            if(evt.keyCode == RIGHT_KEY){
+               rightKeyPressed = false;
+            }
+        }
+        
+        function playerMove(){
+            if(rightKeyPressed){
+                playerXpos += playerXspeed; // x move
+            }
+            if(leftKeyPressed){
+                playerXpos -= playerXspeed; // x move
+            }
+            
+            
+            
+            if(playerXpos > canvas.width - playerSize){ // right bounce
+               playerXspeed *= -1;
+            }
+            if(playerXpos < 0){ // left bounce
+               playerXspeed *= -1;   
+            }
+            
+            if(playerYpos > canvas.height - playerSize){ // bottom bounce
+               playerYspeed *= -1;
+            }
+            if(playerYpos < 0){ // top bounce
+               playerYspeed *= -1;   
+            }
+        }
+        
+        function bricksDraw(){
+            bricks.forEach(function(brick,index,array){
+                colorRect(brick.brickXpos,brick.brickYpos,brick.brickSize,brick.brickSize,'white');
+            });
+        }
+        
+        function bricksMove(){
+             bricks.forEach(function(brick,index,array){
+//               playerXpos += playerXspeed;
+                 brick.brickXpos += brick.brickXSpeed;  
+                 brick.brickYpos += brick.brickYSpeed;  
+                 
+                 if(brick.brickXpos > canvas.width - brick.brickSize){ // right edge bounce
+                    brick.brickXSpeed *= -1;
+                }
+                if(brick.brickXpos < 0){ // left edge bounce
+                    brick.brickXSpeed *= -1;
+                } 
+                if(brick.brickYpos > canvas.height){ // get bricks once leave bottom screen to go the top the screen and reset size and speeds
+                    brick.brickSize = Math.floor(Math.random()*(50 - 20) + 20 ); // resize brick
+                    brick.brickYpos = 0 - brick.brickSize; // set to top of screen
+                    brick.brickXSpeed = Math.floor(Math.random()*(15 - 3) + 3 ); // new xSpeed
+                    brick.brickYSpeed = Math.floor(Math.random()*(15 - 3) + 3 ); // new ySpeed
+                    score++; 
+//                    console.log(score);
+                } 
+                
+            });
+        }
+        
+        function randBrick(){
+            var brickSize = Math.floor(Math.random() * (50 - 20) + 20);
+            var brickXpos = Math.floor(Math.random() * (canvas.width - brickSize) );
+            var brickYpos = Math.floor(Math.random() * (canvas.height - brickSize) );
+            var brickXSpeed = Math.floor(Math.random() * (15 - 2) + 2);
+            var brickYSpeed = Math.floor(Math.random() * (15 - 2) + 2);
+            
+            var newBrickObject = {
+                brickSize: brickSize,
+                brickXpos: brickXpos,
+                brickYpos: brickYpos,
+                brickXSpeed: brickXSpeed,
+                brickYSpeed: brickYSpeed
+            }
+            
+            return newBrickObject; 
+        }
+        
+        function colorRect(x,y,w,h,c) {
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x,y,w,h);
+        }
+        
+    </script>
+</body>

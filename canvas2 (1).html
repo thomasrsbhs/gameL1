@@ -1,0 +1,40 @@
+<!doctype html>
+
+<head>
+    <title>game</title>
+</head>
+
+<body>
+    <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <script>
+        var canvas, canvasContext;
+
+        window.onload = function() {
+            
+            canvas = document.getElementById('gameCanvas');
+            canvasContext = canvas.getContext('2d');
+
+            setInterval(mainloop, 1000 / 50);    
+        }
+
+        //player vars:
+
+
+        function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height,'black'); 
+        }
+
+
+
+            function colorRect(x, y, w, h, c) {
+                canvasContext.fillStyle = 'black';
+                canvasContext.fillRect(x, y, w, h);
+            }
+
+
+             function drawImage(img, x, y, w, h) {
+                canvasContext.drawImage(x, y, w, h);
+                }
+
+    </script>
+</body>
