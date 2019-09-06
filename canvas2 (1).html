@@ -9,8 +9,7 @@
     <script>
         var canvas, canvasContext;
 
-        window.onload = function() {
-            
+        window.onload = function() { 
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
 
@@ -18,23 +17,45 @@
         }
 
         //player vars:
+        var playerXspeed = 5;
+        var playerYspeed = 5;
+        var playerXpos = 0;
+        var playerYpos = 0;
+        var playerSize = 0;
+    
 
 
-        function mainloop() {
-            colorRect(0, 0, canvas.width, canvas.height,'black'); 
-        }
-
+            function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height,'black');  
+            colorRect(0, 0, 20, 50,'yellow'); 
+            }
+        
+            function keyPressed (evt){
+                if{
+                    
+                }
+                if{
+                    
+                }
+            }
 
 
             function colorRect(x, y, w, h, c) {
-                canvasContext.fillStyle = 'black';
-                canvasContext.fillRect(x, y, w, h);
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x, y, w, h);
             }
+            
+            function playerMove(){
+            
+                
+            }
+                
+            
 
 
              function drawImage(img, x, y, w, h) {
                 canvasContext.drawImage(x, y, w, h);
-                }
+            }
 
     </script>
 </body>
