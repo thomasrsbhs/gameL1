@@ -9,53 +9,100 @@
     <script>
         var canvas, canvasContext;
 
-        window.onload = function() { 
+        window.onload = function() {
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
+            
+            document.addEventListener('keydown',keyPressed);
+            document.addEventListener('keyup',keyReleased);
 
-            setInterval(mainloop, 1000 / 50);    
+            setInterval(mainloop, 1000 / 50);
         }
 
-        //player vars:
+        //player vars: (speeds and appearences) 
         var playerXspeed = 5;
         var playerYspeed = 5;
         var playerXpos = 0;
         var playerYpos = 0;
-        var playerSize = 0;
-    
+        var playerSize = 50;
 
+        const LEFT_KEY = 37;
+        const RIGHT_KEY = 39;
+        const UP_KEY = 38;
+        const DOWN_KEY = 40;
+        var leftKeyPressed = false;
+        var rightKeyPressed = false;
+        var upKeyPressed = false;
+        var downKeyPressed = false;
 
-            function mainloop() {
-            colorRect(0, 0, canvas.width, canvas.height,'black');  
-            colorRect(0, 0, 20, 50,'yellow'); 
+        //main function that runs all statements
+        function mainloop() {
+            colorRect(0, 0, canvas.width, canvas.height, 'black');
+            colorRect(playerXpos, playerYpos, playerSize, playerSize, 'yellow');
+
+            playerMove();
+        }
+
+        function keyPressed(evt) {
+//            console.log(evt.keyCode);
+            if (evt.keyCode == LEFT_KEY) {
+                leftKeyPressed = true;
             }
-        
-            function keyPressed (evt){
-                if{
-                    
-                }
-                if{
-                    
-                }
+            if (evt.keyCode == RIGHT_KEY) {
+                rightKeyPressed = true;
+            }
+            if (evt.keyCode == UP_KEY) {
+                upKeyPressed = true;
+            }
+            if (evt.keyCode == DOWN_KEY) {
+                downKeyPressed = true;
+            }
+        }
+
+        function keyReleased(evt) {
+            //stops continuous movement after key pressed, once released movement will stop
+            if (evt.keyCode == LEFT_KEY) {
+                leftKeyPressed = false;
+            }
+            if (evt.keyCode == RIGHT_KEY) {
+                rightKeyPressed = false;
+            }
+            if (evt.keyCode == UP_KEY) {
+                upKeyPressed = false;
+            }
+            if (evt.keyCode == DOWN_KEY) {
+                downKeyPressed = false;
+            }
+        }
+
+        // Car movement
+        function playerMove() {
+            if (rightKeyPressed) {
+                playerXpos += playerXspeed; // x move right
+                console.log(playerXspeed + ':' + playerXpos)
+            }
+            if (leftKeyPressed) {
+                playerXpos -= playerXspeed; // x move left
+            }
+            if (upKeyPressed) {
+                playerYpos += playerYspeed; //positive y move (up)
+            }
+            if (downKeyPressed) {
+                playerYpos -= playerYspeed; // negative y move (down)
             }
 
 
-            function colorRect(x, y, w, h, c) {
+        }
+
+        // Draw car
+        function colorRect(x, y, w, h, c) {
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
-            }
-            
-            function playerMove(){
-            
-                
-            }
-                
-            
+        }
 
-
-             function drawImage(img, x, y, w, h) {
-                canvasContext.drawImage(x, y, w, h);
-            }
-
+        function drawImage(img, x, y, w, h) {
+            canvasContext.drawImage(x, y, w, h);
+        }
+        
     </script>
 </body>
