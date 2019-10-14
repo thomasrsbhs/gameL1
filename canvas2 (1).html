@@ -43,6 +43,8 @@
         var rightKeyPressed = false;
         var upKeyPressed = false;
         var downKeyPressed = false;
+        
+        var startingPos = true;
 
         //main function that runs all statements
         function mainloop() {
@@ -51,10 +53,19 @@
             colorRect(enemyXpos, enemyYpos, enemySize, enemySize, 'red');
 
             playerMove();
+            enemyMove();
             
-        
+            if(startingPos){
+                startPos();
+                startingPos = false;
+            }
+
         } //function mainloop end of func
 
+        function startPos(){
+            playerXpos = canvas.width / 2 - playerSize / 2;
+            playerYpos = canvas.height - playerSize * 2;
+        }
 
         function keyPressed(evt) { //Function registers when a arrow key is pressed and makes it run as true
             //console.log(evt.keyCode);
@@ -100,35 +111,41 @@
             }
             if (upKeyPressed && playerYpos > 0) {
                 playerYpos -= playerYspeed; //positive y move (up) top bounce
-               
+
             }
             if (downKeyPressed && playerYpos < canvas.height - playerSize) {
                 playerYpos += playerYspeed; // negative y move (down) and  bottom bounce
-            }  //function playerMove end of func
-//          
-        
+            } //function playerMove end of func
+            //          
+
         }
 
 
-            //enemy car movement
-            /*function(){
-                
-            } */
+        //enemy car movement
+        function enemyMove() {
+//           enemyXpos += enemyXspeed;
+          enemyYpos += enemyYspeed;
 
-
-
-
-
-
-            // Draw car function: colour, size etc.
-            function colorRect(x, y, w, h, c) {
-                canvasContext.fillStyle = c;
-                canvasContext.fillRect(x, y, w, h);
+            if (enemyYpos > canvas.height) {
+                enemyYpos = 0;
             }
-            // function displays the player
-            function drawImage(img, x, y, w, h) {
-                canvasContext.drawImage(x, y, w, h);
-            }
+
+        }
+
+
+
+
+
+
+        // Draw car function: colour, size etc.
+        function colorRect(x, y, w, h, c) {
+            canvasContext.fillStyle = c;
+            canvasContext.fillRect(x, y, w, h);
+        }
+        // function displays the player
+        function drawImage(img, x, y, w, h) {
+            canvasContext.drawImage(x, y, w, h);
+        }
 
     </script>
 </body>
