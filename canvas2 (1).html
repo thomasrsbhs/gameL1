@@ -12,20 +12,29 @@
         window.onload = function() {
             canvas = document.getElementById('gameCanvas');
             canvasContext = canvas.getContext('2d');
-            
-            document.addEventListener('keydown',keyPressed);
-            document.addEventListener('keyup',keyReleased);
+            //Eventlistener runs functions that activate keys 
+            document.addEventListener('keydown', keyPressed);
+            document.addEventListener('keyup', keyReleased);
 
-            setInterval(mainloop, 1000 / 50);
+            setInterval(mainloop, 1000 / 60);
         }
 
-        //player vars: (speeds and appearences) 
-        var playerXspeed = 5;
-        var playerYspeed = 5;
+        //player vars: (speeds and appearences, const for permanent functions) 
+        var playerXspeed = 6;
+        var playerYspeed = 6;
         var playerXpos = 0;
         var playerYpos = 0;
-        var playerSize = 50;
+        var playerSize = 35;
 
+        //enemies vars:
+        var enemyYspeed = 5;
+        var enemyXspeed = 5;
+        var enemyYpos = 0;
+        var enemyXpos = 0;
+        var enemySize = 35;
+        var enemyCount = 0;
+
+        //constants and variables for controlls
         const LEFT_KEY = 37;
         const RIGHT_KEY = 39;
         const UP_KEY = 38;
@@ -39,12 +48,16 @@
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
             colorRect(playerXpos, playerYpos, playerSize, playerSize, 'yellow');
+            colorRect(enemyXpos, enemyYpos, enemySize, enemySize, 'red');
 
             playerMove();
-        }
+            
+        
+        } //function mainloop end of func
 
-        function keyPressed(evt) {
-//            console.log(evt.keyCode);
+
+        function keyPressed(evt) { //Function registers when a arrow key is pressed and makes it run as true
+            //console.log(evt.keyCode);
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPressed = true;
             }
@@ -57,10 +70,10 @@
             if (evt.keyCode == DOWN_KEY) {
                 downKeyPressed = true;
             }
-        }
+        } //keyPressed end of func
 
         function keyReleased(evt) {
-            //stops continuous movement after key pressed, once released movement will stop
+            //stops continuous movement after key pressed, once released, movement will stop, stops arrow keys from sticking.
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPressed = false;
             }
@@ -73,36 +86,49 @@
             if (evt.keyCode == DOWN_KEY) {
                 downKeyPressed = false;
             }
-        }
 
-        // Car movement
+        } //keyRealeased end of func  
+
+        // Car movement, causes the player to move left, right, up and down after a key is pressed.
         function playerMove() {
-            if (rightKeyPressed) {
-                playerXpos += playerXspeed; // x move right
+            if (rightKeyPressed && playerXpos < canvas.width - playerSize) {
+                playerXpos += playerXspeed; // x move right, right bounce
                 console.log(playerXspeed + ':' + playerXpos)
             }
-            if (leftKeyPressed) {
-                playerXpos -= playerXspeed; // x move left
+            if (leftKeyPressed && playerXpos > 0) {
+                playerXpos -= playerXspeed; // x move left, left bounce 
             }
-            if (upKeyPressed) {
-                playerYpos += playerYspeed; //positive y move (up)
+            if (upKeyPressed && playerYpos > 0) {
+                playerYpos -= playerYspeed; //positive y move (up) top bounce
+               
             }
-            if (downKeyPressed) {
-                playerYpos -= playerYspeed; // negative y move (down)
-            }
-
-
-        }
-
-        // Draw car
-        function colorRect(x, y, w, h, c) {
-            canvasContext.fillStyle = c;
-            canvasContext.fillRect(x, y, w, h);
-        }
-
-        function drawImage(img, x, y, w, h) {
-            canvasContext.drawImage(x, y, w, h);
-        }
+            if (downKeyPressed && playerYpos < canvas.height - playerSize) {
+                playerYpos += playerYspeed; // negative y move (down) and  bottom bounce
+            }  //function playerMove end of func
+//          
         
+        }
+
+
+            //enemy car movement
+            /*function(){
+                
+            } */
+
+
+
+
+
+
+            // Draw car function: colour, size etc.
+            function colorRect(x, y, w, h, c) {
+                canvasContext.fillStyle = c;
+                canvasContext.fillRect(x, y, w, h);
+            }
+            // function displays the player
+            function drawImage(img, x, y, w, h) {
+                canvasContext.drawImage(x, y, w, h);
+            }
+
     </script>
 </body>
