@@ -24,16 +24,18 @@
         var playerYspeed = 6;
         var playerXpos = 0;
         var playerYpos = 0;
-        var playerSize = 35;
+        var playerColor = 'yellow';
+        const PLAYER_SIZE = 30;
 
-        //enemies vars:
+        //enemies vars and const:
         var enemyYspeed = 8;
         var enemyYpos = 0;
         var enemyXpos = 0;
-        var enemySize = 35;
         var enemyCount = 0;
+        var enemyColor = 'red';
+        const ENEMY_SIZE = 30;
 
-        //constants and variables for controlls
+        //constants and variables for key controls
         const LEFT_KEY = 37;
         const RIGHT_KEY = 39;
         const UP_KEY = 38;
@@ -44,12 +46,14 @@
         var downKeyPressed = false;
 
         var startingPos = true;
+        
+        var enemies = [];
 
-        //main function that runs all statements
+        //main function that loops all functions permanently
         function mainloop() {
             colorRect(0, 0, canvas.width, canvas.height, 'black');
-            colorRect(playerXpos, playerYpos, playerSize, playerSize, 'yellow');
-            colorRect(enemyXpos, enemyYpos, enemySize, enemySize, 'red');
+            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, playerColor);
+            colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, enemyColor);
 
             playerMove();
             enemyMove();
@@ -60,13 +64,13 @@
             }
 
         } //function mainloop end of func
-
+        //startpos of the player
         function startPos() {
-            playerXpos = canvas.width / 2 - playerSize / 2;
-            playerYpos = canvas.height - playerSize * 2;
-        }
+            playerXpos = canvas.width / 2 - PLAYER_SIZE / 2;
+            playerYpos = canvas.height - PLAYER_SIZE * 2;
+        } //startpos end of func
 
-        function keyPressed(evt) { //Function registers when a arrow key is pressed and makes it run as true
+        function keyPressed(evt) { //Function registers when an arrow key is pressed and makes it run as true
             //console.log(evt.keyCode);
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPressed = true;
@@ -83,7 +87,7 @@
         } //keyPressed end of func
 
         function keyReleased(evt) {
-            //stops continuous movement after key pressed, once released, movement will stop,stops sticking movement.
+            //stops continuous movement after key pressed, once released, movement will stop, stops sticking keys.
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPressed = false;
             }
@@ -101,7 +105,7 @@
 
         // Car movement, causes the player to move left, right, up and down after a key is pressed.
         function playerMove() {
-            if (rightKeyPressed && playerXpos < canvas.width - playerSize) {
+            if (rightKeyPressed && playerXpos < canvas.width - PLAYER_SIZE) {
                 playerXpos += playerXspeed; // x move right, right bounce
                 console.log(playerXspeed + ':' + playerXpos)
             }
@@ -112,10 +116,10 @@
                 playerYpos -= playerYspeed; //positive y move (up) top bounce
 
             }
-            if (downKeyPressed && playerYpos < canvas.height - playerSize) {
+            if (downKeyPressed && playerYpos < canvas.height - PLAYER_SIZE) {
                 playerYpos += playerYspeed; // negative y move (down) and  bottom bounce
             } //function playerMove end of func
-                      
+
 
         }
 
@@ -130,23 +134,33 @@
             }
 
         }
-        //creates multiple enemies
-        function makeEnemies() {
+        //moves all enemies
+        function moveEnemies() {
+            const ENEMY_SIZE = 20;
+            var enemyXpos = Math.floor(Math.random()*(canvas.width - ENEMY_SIZE))
+            
+            var enemy = {
+                ENEMY_SIZE:ENEMY_SIZE,
+                enemyXpos: enemyXpos
+            }
+            
+            enemies.push(enemy);
+            
 
-       }
-        //draws these multiple cars
-        function enemiesDraw(){
-            enemies.foreach(function(enemy,index,array){
-                colorRect(enemy.enemyXpos,enemy.enemyYpos,enemy.enemySize,enemy.enemySize,'red');  
+        }
+        //draws the multiple enemies on the screen for each loop
+        function drawEnemies() {
+            enemies.foreach(function(enemy,i) {
+                colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, enemy.enemyColor);
             });
         }
-              
+        
+        //spawns the enemies randomly based on an array
+        function enemiesRandom(){
+            //Math.floor(Math.random() * (30 - 3)) + 1;
+        }
             
         
-
-
-
-
 
 
 
