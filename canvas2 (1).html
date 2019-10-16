@@ -27,8 +27,7 @@
         var playerSize = 35;
 
         //enemies vars:
-        var enemyYspeed = 5;
-        var enemyXspeed = 5;
+        var enemyYspeed = 8;
         var enemyYpos = 0;
         var enemyXpos = 0;
         var enemySize = 35;
@@ -43,7 +42,7 @@
         var rightKeyPressed = false;
         var upKeyPressed = false;
         var downKeyPressed = false;
-        
+
         var startingPos = true;
 
         //main function that runs all statements
@@ -54,15 +53,15 @@
 
             playerMove();
             enemyMove();
-            
-            if(startingPos){
+            //starting position of the player
+            if (startingPos) {
                 startPos();
                 startingPos = false;
             }
 
         } //function mainloop end of func
 
-        function startPos(){
+        function startPos() {
             playerXpos = canvas.width / 2 - playerSize / 2;
             playerYpos = canvas.height - playerSize * 2;
         }
@@ -84,7 +83,7 @@
         } //keyPressed end of func
 
         function keyReleased(evt) {
-            //stops continuous movement after key pressed, once released, movement will stop, stops arrow keys from sticking.
+            //stops continuous movement after key pressed, once released, movement will stop,stops sticking movement.
             if (evt.keyCode == LEFT_KEY) {
                 leftKeyPressed = false;
             }
@@ -116,21 +115,37 @@
             if (downKeyPressed && playerYpos < canvas.height - playerSize) {
                 playerYpos += playerYspeed; // negative y move (down) and  bottom bounce
             } //function playerMove end of func
-            //          
+                      
 
         }
 
 
         //enemy car movement
         function enemyMove() {
-//           enemyXpos += enemyXspeed;
-          enemyYpos += enemyYspeed;
+            //enemyXpos += enemyXspeed;
+            enemyYpos += enemyYspeed;
 
             if (enemyYpos > canvas.height) {
                 enemyYpos = 0;
             }
 
         }
+        //creates multiple enemies
+        function makeEnemies() {
+
+       }
+        //draws these multiple cars
+        function enemiesDraw(){
+            enemies.foreach(function(enemy,index,array){
+                colorRect(enemy.enemyXpos,enemy.enemyYpos,enemy.enemySize,enemy.enemySize,'red');  
+            });
+        }
+              
+            
+        
+
+
+
 
 
 
