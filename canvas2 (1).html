@@ -27,14 +27,20 @@
         var playerColor = 'yellow';
         const PLAYER_SIZE = 30;
 
-        //enemies vars and const:
+        //enemies and line vars and const:
         var enemyYspeed = 8;
         var enemyYpos = 0;
         var enemyXpos = 0;
         var enemyCount = 0;
         var enemyColor = 'red';
         const ENEMY_SIZE = 30;
-
+        var lineYspeed = 0;
+        var lineXspeed = 0;
+        var lineXpos = 0; 
+        var lineYpos = 0;
+        var lineSize = 5;
+        var lineColor = 'white';
+        
         //constants and variables for key controls
         const LEFT_KEY = 37;
         const RIGHT_KEY = 39;
@@ -54,6 +60,7 @@
             colorRect(0, 0, canvas.width, canvas.height, 'black');
             colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, playerColor);
             colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, enemyColor);
+            colorRect(lineXpos, lineYpos, lineSize, lineSize, lineColor);
 
             playerMove();
             enemyMove();
@@ -133,6 +140,11 @@
                 enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE));
                 enemyYspeed = Math.floor(Math.random() *(10 - 6) + 4);
             }   
+            //enemy and player collision
+            if(enemyYpos + ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_SIZE){
+                console.log ('hit');
+                playerXpos =
+            }
             
 
         }
@@ -143,10 +155,11 @@
             
             var enemy = {
                 ENEMY_SIZE:ENEMY_SIZE,
-                enemyXpos: enemyXpos
+                enemyXpos:enemyXpos
             }
             
             enemies.push(enemy);
+            enemy.enemyYspeed = Math.floor(Math.Random() *(canvas.height - ENEMY_SIZE))
             
 
         }
@@ -159,7 +172,7 @@
         
         //spawns the enemies randomly based on an array
         function enemiesRandom(){
-            //Math.floor(Math.random() * (30 - 3)) + 1;
+           
         }
             
         
