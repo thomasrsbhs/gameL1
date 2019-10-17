@@ -126,17 +126,19 @@
 
         //enemy car movement
         function enemyMove() {
-            //enemyXpos += enemyXspeed;
             enemyYpos += enemyYspeed;
 
             if (enemyYpos > canvas.height) {
-                enemyYpos = 0;
-            }
+                enemyYpos = 0 - ENEMY_SIZE;
+                enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE));
+                enemyYspeed = Math.floor(Math.random() *(10 - 6) + 4);
+            }   
+            
 
         }
-        //moves all enemies
+        //moves all enemies at a random speed
         function moveEnemies() {
-            const ENEMY_SIZE = 20;
+            const ENEMY_SIZE = 30;
             var enemyXpos = Math.floor(Math.random()*(canvas.width - ENEMY_SIZE))
             
             var enemy = {
