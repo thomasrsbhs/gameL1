@@ -64,6 +64,7 @@
 
             playerMove();
             enemyMove();
+          
             //starting position of the player
             if (startingPos) {
                 startPos();
@@ -140,10 +141,13 @@
                 enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE));
                 enemyYspeed = Math.floor(Math.random() *(10 - 6) + 4);
             }   
-            //enemy and player collision
+            //enemy and player collision, once player hits enemy returns player to the startingPos
             if(enemyYpos + ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemyXpos + ENEMY_SIZE > playerXpos && enemyXpos < playerXpos + PLAYER_SIZE){
-                console.log ('hit');
-                playerXpos =
+               // console.log ('hit');
+                playerXpos = 0;
+                playerYpos = canvas.height - PLAYER_SIZE;
+                startPos();
+              
             }
             
 
