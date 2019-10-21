@@ -33,7 +33,6 @@
         var enemyCount = 0;
         const ENEMY_SIZE = 30;
         var lineYspeed = 0;
-        var lineXspeed = 0;
         var lineXpos = 0;
         var lineYpos = 0;
         var lineSize = 5;
@@ -52,7 +51,7 @@
         //game rules/functions
         var startingPos = true;
         var enemies = []; //empty array
-        var totalEnemies = 4;
+        var totalEnemies = 2;
 
         function mainloop() { //main function that loops all functions permanently
             colorRect(0, 0, canvas.width, canvas.height, 'black');
@@ -76,6 +75,7 @@
             playerMove();
             enemyMove();
             drawEnemy();
+            
            
         } //function mainloop end of func
 
@@ -165,7 +165,7 @@
             
         const ENEMY_SIZE = 30;
         //var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE))
-        var enemyXpos = enemyPos * (canvas.width / 4); //  puts up to 3 enemies in these 3 postions
+        var enemyXpos = enemyPos * (canvas.width / 2); //  puts up to 3 enemies in these 3 postions
         var enemyYpos = 0 - ENEMY_SIZE;
         var enemyYspeed = Math.floor(Math.random() * (8 - 6) + 4);
 
