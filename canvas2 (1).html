@@ -27,7 +27,7 @@
         const PLAYER_SIZE = 30;
 
         //enemies and line vars and const:
-        var enemyYspeed = 8;
+        var enemyYspeed = 12;
         var enemyYpos = 0;
         var enemyXpos = 0;
         var enemyCount = 0;
@@ -147,7 +147,7 @@
             if (enemy.enemyYpos > canvas.height) { // enmey out bottom
                 enemy.enemyYpos = 0 - enemy.ENEMY_SIZE; // enemy at the top
                 enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
-                enemy.enemyYspeed = Math.floor(Math.random() * (10 - 6) + 4);
+                enemy.enemyYspeed = Math.floor(Math.random() * (15 - 6) + 4);
             }
             //enemy and player collision, once player hits enemy returns player to the startPos
             if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
