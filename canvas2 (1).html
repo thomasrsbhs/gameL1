@@ -27,16 +27,18 @@
         const PLAYER_SIZE = 30;
 
         //enemies and line vars and const:
-        var enemyYspeed = 8;
+        var enemyYspeed = 12;
         var enemyYpos = 0;
         var enemyXpos = 0;
         var enemyCount = 0;
         const ENEMY_SIZE = 30;
-        var lineYspeed = 0;
-        var lineXspeed = 0;
+        var lineYspeed = 6;
         var lineXpos = 0;
         var lineYpos = 0;
-        var lineSize = 5;
+        var lineSize = 15;
+        const LINE_WIDTH = 5; 
+        const LINE_HEIGHT = 40;
+        const LINE_SIZE = 5;
         
 
         //constants and variables for key controls
@@ -51,17 +53,18 @@
 
         //game rules/functions
         var startingPos = true;
-        var enemies = []; //empty array
+        var enemies = []; //empty enemy array
+        var lines = [];   //empty line array
         var totalEnemies = 4;
 
         function mainloop() { //main function that loops all functions permanently
             colorRect(0, 0, canvas.width, canvas.height, 'black');
             
-            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player
+            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
             
-            colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); //enemy
+            //colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); //enemy square drawn
             
-            colorRect(lineXpos, lineYpos, lineSize, lineSize, 'white'); //lines
+            colorRect(lineXpos, lineYpos, LINE_WIDTH, LINE_HEIGHT, 'white'); //lines drawn
 
             
             if (startingPos) { //starting position of the player
@@ -76,6 +79,8 @@
             playerMove();
             enemyMove();
             drawEnemy();
+            lineMove();
+            
            
         } //function mainloop end of func
 
@@ -136,10 +141,32 @@
 
 
         } //function playerMove end of func
+        
+        function lineMove() { // Line movement and speed, moves down Y
+            lineYpos += lineYspeed
+            
+        if(lineYpos > canvas.height) {
+            lineYpos = 0 - lineSize; 
+            lineXpos = canvas.width - lineSize;
+            lineYspeed;
+        }
+            
+        }// linemove end of func
+        
+        function makeLine(){
+            
+            
+        }
+        
+        function drawLine(){
+            
+        }
+        
+        
 
 
-        //enemy movement and speed 
-        function enemyMove() {
+        
+        function enemyMove() { //enemy movement and speed 
             enemies.forEach(function(enemy){
             
                 enemy.enemyYpos += enemy.enemyYspeed;
@@ -147,7 +174,7 @@
             if (enemy.enemyYpos > canvas.height) { // enmey out bottom
                 enemy.enemyYpos = 0 - enemy.ENEMY_SIZE; // enemy at the top
                 enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
-                enemy.enemyYspeed = Math.floor(Math.random() * (10 - 6) + 4);
+                enemy.enemyYspeed = Math.floor(Math.random() * (8 - 6) + 4);
             }
             //enemy and player collision, once player hits enemy returns player to the startPos
             if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
@@ -165,7 +192,7 @@
             
         const ENEMY_SIZE = 30;
         //var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE))
-        var enemyXpos = enemyPos * (canvas.width / 4); //  puts up to 3 enemies in these 3 postions
+        var enemyXpos = enemyPos * (canvas.width / 3); //  puts up to 3 enemies in these 3 postions
         var enemyYpos = 0 - ENEMY_SIZE;
         var enemyYspeed = Math.floor(Math.random() * (8 - 6) + 4);
 
