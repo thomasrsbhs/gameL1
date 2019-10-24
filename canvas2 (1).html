@@ -55,7 +55,7 @@
         var enemies = []; //empty enemy array
         var lines = []; //empty line array
         var totalEnemies = 4;
-        var totalLines  = 10;
+        var totalLines  = 5;
         
 
         function mainloop() { //main function that loops all functions permanently
@@ -85,6 +85,7 @@
             enemyMove();
             drawEnemy();
             lineMove();
+            makeLine();
             drawLine();
 
 
@@ -160,14 +161,16 @@
             }
         });
 
-        } // linemove end of func
+        }  //linemove end of func 
+       
+        
         
       
 
         function makeLine() { // function that creates lines
-            var linePos = line (* 5) + 1;
+            var linePos = Math.floor(Math.random() * 3) + 1;
 
-            const LINE_SIZE = 5;
+            const LINE_SIZE = 10;
             var lineXpos = linePos * (canvas.width / 5); // puts 5 lines into 5 positions 
             var lineYpos = 0 - LINE_SIZE;
             var lineYspeed = 4;
@@ -192,6 +195,7 @@
             
 
         }// drawLine end of func
+         
 
 
 
@@ -223,7 +227,7 @@
 
             const ENEMY_SIZE = 30;
             //var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE))
-            var enemyXpos = enemyPos * (canvas.width / 4); //  puts up to 4 enemies in these 3 postions
+            var enemyXpos = enemyPos * (canvas.width / 3); //  puts up to 4 enemies in these 3 postions
             var enemyYpos = 0 - ENEMY_SIZE;
             var enemyYspeed = Math.floor(Math.random() * (6 - 4) + 2);
 
