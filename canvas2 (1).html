@@ -2,10 +2,13 @@
 
 <head>
     <title>game</title>
+    <h1>Dodge the squares</h1>
 </head>
 
 <body>
+   
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+     <p>Use the arrow keys to move</p>
     <script>
         var canvas, canvasContext;
 
@@ -50,12 +53,16 @@
         var upKeyPressed = false;
         var downKeyPressed = false;
 
-        //game rules/functions
+        //arrays 
         var startingPos = true;
         var enemies = []; //empty enemy array
         var lines = []; //empty line array
         var totalEnemies = 4;
         var totalLines  = 5;
+        
+        //prompts
+        var difficulty = prompt("Select the difficulty", "easy, medium or hard")
+        var username = prompt("Please enter your username")
         
 
         function mainloop() { //main function that loops all functions permanently
@@ -168,17 +175,20 @@
       
 
         function makeLine() { // function that creates lines
-            var linePos = Math.floor(Math.random() * 3) + 1;
-
-            const LINE_SIZE = 10;
+            var linePos = Math.floor(Math.random() * 3) + 1;// fix this so it is not random
+            const LINE_HEIGHT = 40 ;
+            const LINE_WIDTH = 5 ;
+            const LINE_GAP = 55 ;
             var lineXpos = linePos * (canvas.width / 5); // puts 5 lines into 5 positions 
             var lineYpos = 0 - LINE_SIZE;
-            var lineYspeed = 4;
+            var lineYspeed = 5 ;
+            
             
             var line = { // line array
                 lineXpos:lineXpos,
                 lineYpos:lineYpos,
-                LINE_SIZE:LINE_SIZE,
+                LINE_WIDTH:LINE_WIDTH,
+                LINE_HEIGHT:LINE_HEIGHT,
                 lineYspeed:lineYspeed
                 
             }
@@ -189,7 +199,7 @@
 
         function drawLine() {
             lines.forEach(function(line, i,) {
-                 colorRect(line.lineXpos, line.lineYpos, line.LINE_SIZE, line.LINE_SIZE, 'white');
+                 colorRect(line.lineXpos, line.lineYpos, line.LINE_WIDTH, line.LINE_HEIGHT, 'white');
             });
                 
             
@@ -209,10 +219,10 @@
                 if (enemy.enemyYpos > canvas.height) { // enmey out bottom
                     enemy.enemyYpos = 0 - enemy.ENEMY_SIZE; // enemy at the top
                     enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
-                    enemy.enemyYspeed = Math.floor(Math.random() * (6 - 4) + 2);
+                    enemy.enemyYspeed = Math.floor(Math.random() * (10 - 4) + 2);
                 }
                 //enemy and player collision, once player hits enemy returns player to the startPos
-                if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
+                if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
                     console.log('hit');
                     startPos();
 
