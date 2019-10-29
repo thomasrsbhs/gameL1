@@ -23,8 +23,8 @@
         }
 
         //player vars: (speeds and appearences, const for permanent functions) 
-        var playerXspeed = 6;
-        var playerYspeed = 6;
+        var playerXspeed = 3.3;
+        var playerYspeed = 5;
         var playerXpos = 0;
         var playerYpos = 0;
         const PLAYER_SIZE = 30;
@@ -52,6 +52,9 @@
         var rightKeyPressed = false;
         var upKeyPressed = false;
         var downKeyPressed = false;
+        var grassGap = 83;
+        var lineTotal = 4;
+        var lineCount = 0;
 
         //arrays 
         var startingPos = true;
@@ -175,12 +178,13 @@
       
 
         function makeLine() { // function that creates lines
-            var linePos = Math.floor(Math.random() * 3) + 1;// fix this so it is not random
+            var grassGap = 83;
+            var linePos = Math.floor(Math.random() * 3) + 1; ;// fix this so it is not random
             const LINE_HEIGHT = 40 ;
             const LINE_WIDTH = 5 ;
             const LINE_GAP = 55 ;
             var lineXpos = linePos * (canvas.width / 5); // puts 5 lines into 5 positions 
-            var lineYpos = 0 - LINE_SIZE;
+            var lineYpos = 0 - LINE_HEIGHT;
             var lineYspeed = 5 ;
             
             
@@ -200,6 +204,9 @@
         function drawLine() {
             lines.forEach(function(line, i,) {
                  colorRect(line.lineXpos, line.lineYpos, line.LINE_WIDTH, line.LINE_HEIGHT, 'white');
+                if (line.lineYpos > canvas.height) {
+                    line.lineYpos = 0 - line.LINE_HEIGHT;
+                }
             });
                 
             
