@@ -61,21 +61,27 @@
         var enemies = []; //empty enemy array
         var lines = []; //empty line array
         var totalEnemies = 4;
-        var totalLines  = 5;
+        var totalLines  = 40;
         
         //prompts
-        var difficulty = prompt("Select the difficulty", "easy, medium or hard")
-        var username = prompt("Please enter your username")
+        var difficulty = prompt("Select the difficulty", "easy, medium or hard");
+        var userName = 'DGD';
+        var score = 0;
+        var death = 0;
+        var gameRun = true;
+        
         
 
         function mainloop() { //main function that loops all functions permanently
+            if(gameRun){
+                
             colorRect(0, 0, canvas.width, canvas.height, 'black');
+            drawLine();
 
             colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
 
-            //colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); //enemy square drawn
-
-            colorRect(lineXpos, lineYpos, LINE_WIDTH, LINE_HEIGHT, 'white'); //lines drawn
+            colorText('score:' + score,5,20, '20px Arial', 'white');
+            colorText('Deaths:' + death,canvas.width - 100,20, '20px Arial', 'red');
 
 
             if (startingPos) { //starting position of the player
@@ -90,14 +96,21 @@
 
                 startingPos = false;
             }
+                if(death >= 10){ //
+                    gameRun = false;
+                }
 
             playerMove();
             enemyMove();
             drawEnemy();
             lineMove();
-            makeLine();
-            drawLine();
+//            makeLine();
 
+            }// if gameRun end
+            else {
+                 colorRect(0, 0, canvas.width, canvas.height, 'black');
+                 colorText( ' your score was ' + score,5,canvas.height / 2, '25px Arial', 'white');
+            }
 
         } //function mainloop end of func
 
@@ -165,9 +178,9 @@
              line.lineYpos += line.lineYspeed
 
             if (line.lineYpos > canvas.height) {
-                line.lineYpos = 0 - line.LINE_SIZE;
-                line.lineXpos = canvas.width - line.LINE_SIZE;
-                line.lineYspeed
+                line.lineYpos = 0 - line.LINE_HEIGHT - line.LINE_HEIGHT * 0.6;
+//                line.lineXpos = canvas.width - line.LINE_WIDTH;
+//                line.lineYspeed
             }
         });
 
@@ -176,16 +189,28 @@
         
         
       
-
+        var lineRowCount = 0;
+        
         function makeLine() { // function that creates lines
             var grassGap = 83;
             var linePos = Math.floor(Math.random() * 3) + 1; ;// fix this so it is not random
             const LINE_HEIGHT = 40 ;
             const LINE_WIDTH = 5 ;
             const LINE_GAP = 55 ;
-            var lineXpos = linePos * (canvas.width / 5); // puts 5 lines into 5 positions 
-            var lineYpos = 0 - LINE_HEIGHT;
+            const LINE_H_GAP = 20;
+            var lineXpos = grassGap * (lineCount % 5 + 1);
+            //var lineXpos = linePos * (canvas.width / 5); // puts 5 lines into 5 positions 
+            var lineYpos = 0
+            
+            if(lineCount % 5 == 0 && lineCount != 0){
+                lineRowCount++;
+               lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
+            } else {
+               lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
+            }
+            //var lineYpos = 0 - LINE_HEIGHT;
             var lineYspeed = 5 ;
+            lineCount++;
             
             
             var line = { // line array
@@ -226,12 +251,15 @@
                 if (enemy.enemyYpos > canvas.height) { // enmey out bottom
                     enemy.enemyYpos = 0 - enemy.ENEMY_SIZE; // enemy at the top
                     enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
-                    enemy.enemyYspeed = Math.floor(Math.random() * (10 - 4) + 2);
+                    enemy.enemyYspeed = Math.floor(Math.random() * (6 - 4) + 2);
                 }
                 //enemy and player collision, once player hits enemy returns player to the startPos
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
                     console.log('hit');
                     startPos();
+                    gameRun = false;
+                    death++;
+                    
 
 
                 } //enemyMove end of func
@@ -281,6 +309,14 @@
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
         }
+        
+        function colorText(msg,x,y,f,c){ //writes text on game over, wrtes score and deaths on mainloop
+            canvasContext.fillStyle = c;
+            canvasContext.font = f; 
+            canvasContext.fillText(msg,x,y);
+            
+        }// colorText end of func
+        
         // function displays the player
         function drawImage(img, x, y, w, h) {
             canvasContext.drawImage(x, y, w, h);
