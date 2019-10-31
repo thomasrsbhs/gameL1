@@ -6,9 +6,9 @@
 </head>
 
 <body>
-   
+
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-     <p>Use the arrow keys to move</p>
+    <p>Use the arrow keys to move</p>
     <script>
         var canvas, canvasContext;
 
@@ -61,55 +61,75 @@
         var enemies = []; //empty enemy array
         var lines = []; //empty line array
         var totalEnemies = 4;
-        var totalLines  = 40;
-        
+        var totalLines = 40;
+
         //prompts
-        var difficulty = prompt("Select the difficulty", "easy, medium or hard");
-        var userName = 'DGD';
+        //var difficulty = prompt("Select the difficulty", "easy, medium or hard");
+        var userName = '';
+        var userPass = false;
+        while(userPass == false){
+            userName = prompt("Please enter your userName, max length 10", "player");
+            if(userName != null && userName != ''){
+                if(userName.length <= 10){
+                   userPass = true;
+                }
+            }  
+        }
+        //var textLimit = 10;
         var score = 0;
         var death = 0;
         var gameRun = true;
-        
-        
+
+
 
         function mainloop() { //main function that loops all functions permanently
-            if(gameRun){
+            if (gameRun) {
+
+                colorRect(0, 0, canvas.width, canvas.height, 'black');
+                drawLine();
+
+                colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
+
+                colorText('score:' + score, 5, 20, '20px Arial', 'white');
+                colorText('Deaths:' + death, canvas.width - 100, 20, '20px Arial', 'red');
                 
-            colorRect(0, 0, canvas.width, canvas.height, 'black');
-            drawLine();
-
-            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
-
-            colorText('score:' + score,5,20, '20px Arial', 'white');
-            colorText('Deaths:' + death,canvas.width - 100,20, '20px Arial', 'red');
-
-
-            if (startingPos) { //starting position of the player
-                for (i = 0; i < totalEnemies; i++) { //for loop
-                    startPos();
-                    makeEnemy();
-                }
+                if (userName > 10){ 
+                    userName == false;
                 
-                for (i = 0; i < totalLines; i++) {
-                    makeLine();
                 }
 
-                startingPos = false;
-            }
-                if(death >= 10){ //
+
+                
+
+                if (startingPos) { //starting position of the player
+                    for (i = 0; i < totalEnemies; i++) { //for loop
+                        startPos();
+                        makeEnemy();
+                    }
+
+                    for (i = 0; i < totalLines; i++) {
+                        makeLine();
+                    }
+
+                    startingPos = false;
+                    }
+                
+                if (death >= 10) { //
                     gameRun = false;
-                }
+                    }
+                
+                playerMove();
+                enemyMove();
+                drawEnemy();
+                lineMove();
+               
 
-            playerMove();
-            enemyMove();
-            drawEnemy();
-            lineMove();
-//            makeLine();
+                //            makeLine();
 
-            }// if gameRun end
+            } // if gameRun end
             else {
-                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                 colorText( ' your score was ' + score,5,canvas.height / 2, '25px Arial', 'white');
+                colorRect(0, 0, canvas.width, canvas.height, 'black');
+                colorText(userName+' your score was ' + score, 5, canvas.height / 2, '25px Arial', 'white');
             }
 
         } //function mainloop end of func
@@ -173,78 +193,78 @@
         } //function playerMove end of func
 
         function lineMove() { // Line movement and speed, moves down Y
-            lines.forEach(function(line, i,) {
-                          
-             line.lineYpos += line.lineYspeed
+            lines.forEach(function(line, i, ) {
 
-            if (line.lineYpos > canvas.height) {
-                line.lineYpos = 0 - line.LINE_HEIGHT - line.LINE_HEIGHT * 0.6;
-//                line.lineXpos = canvas.width - line.LINE_WIDTH;
-//                line.lineYspeed
-            }
-        });
+                line.lineYpos += line.lineYspeed
 
-        }  //linemove end of func 
-       
-        
-        
-      
+                if (line.lineYpos > canvas.height) {
+                    line.lineYpos = 0 - line.LINE_HEIGHT - line.LINE_HEIGHT * 0.6;
+                    //                line.lineXpos = canvas.width - line.LINE_WIDTH;
+                    //                line.lineYspeed
+                }
+            });
+
+        } //linemove end of func 
+
+
+
+
         var lineRowCount = 0;
-        
+
         function makeLine() { // function that creates lines
             var grassGap = 83;
-            var linePos = Math.floor(Math.random() * 3) + 1; ;// fix this so it is not random
-            const LINE_HEIGHT = 40 ;
-            const LINE_WIDTH = 5 ;
-            const LINE_GAP = 55 ;
+            var linePos = Math.floor(Math.random() * 3) + 1;; // fix this so it is not random
+            const LINE_HEIGHT = 40;
+            const LINE_WIDTH = 5;
+            const LINE_GAP = 55;
             const LINE_H_GAP = 20;
             var lineXpos = grassGap * (lineCount % 5 + 1);
             //var lineXpos = linePos * (canvas.width / 5); // puts 5 lines into 5 positions 
             var lineYpos = 0
-            
-            if(lineCount % 5 == 0 && lineCount != 0){
+
+            if (lineCount % 5 == 0 && lineCount != 0) {
                 lineRowCount++;
-               lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
+                lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
             } else {
-               lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
+                lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
             }
             //var lineYpos = 0 - LINE_HEIGHT;
-            var lineYspeed = 5 ;
+            var lineYspeed = 5;
             lineCount++;
-            
-            
+
+
             var line = { // line array
-                lineXpos:lineXpos,
-                lineYpos:lineYpos,
-                LINE_WIDTH:LINE_WIDTH,
-                LINE_HEIGHT:LINE_HEIGHT,
-                lineYspeed:lineYspeed
-                
+                lineXpos: lineXpos,
+                lineYpos: lineYpos,
+                LINE_WIDTH: LINE_WIDTH,
+                LINE_HEIGHT: LINE_HEIGHT,
+                lineYspeed: lineYspeed
+
             }
-            
+
             lines.push(line); // array for lines, pushes var line info into an array
-            
-        }// makeLine end of func
+
+        } // makeLine end of func
 
         function drawLine() {
-            lines.forEach(function(line, i,) {
-                 colorRect(line.lineXpos, line.lineYpos, line.LINE_WIDTH, line.LINE_HEIGHT, 'white');
+            lines.forEach(function(line, i, ) {
+                colorRect(line.lineXpos, line.lineYpos, line.LINE_WIDTH, line.LINE_HEIGHT, 'white');
                 if (line.lineYpos > canvas.height) {
                     line.lineYpos = 0 - line.LINE_HEIGHT;
                 }
             });
-                
-            
 
-        }// drawLine end of func
-         
+
+
+        } // drawLine end of func
+
 
 
 
 
 
         function enemyMove() { //enemy movement and speed 
-            enemies.forEach(function(enemy, i,) {
+            enemies.forEach(function(enemy, i, ) {
 
                 enemy.enemyYpos += enemy.enemyYspeed;
 
@@ -259,7 +279,7 @@
                     startPos();
                     gameRun = false;
                     death++;
-                    
+
 
 
                 } //enemyMove end of func
@@ -309,14 +329,14 @@
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
         }
-        
-        function colorText(msg,x,y,f,c){ //writes text on game over, wrtes score and deaths on mainloop
+
+        function colorText(msg, x, y, f, c) { //writes text on game over, wrtes score and deaths on mainloop
             canvasContext.fillStyle = c;
-            canvasContext.font = f; 
-            canvasContext.fillText(msg,x,y);
-            
-        }// colorText end of func
-        
+            canvasContext.font = f;
+            canvasContext.fillText(msg, x, y);
+
+        } // colorText end of func
+
         // function displays the player
         function drawImage(img, x, y, w, h) {
             canvasContext.drawImage(x, y, w, h);
