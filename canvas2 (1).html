@@ -19,7 +19,7 @@
             document.addEventListener('keydown', keyPressed);
             document.addEventListener('keyup', keyReleased);
 
-            setInterval(mainloop, 1000 / 60);
+            setInterval(mainloop, 1000 / 60); // Runs the code 60 times a second  
         }
 
         //player vars: (speeds and appearences, const for permanent functions) 
@@ -30,6 +30,8 @@
         const PLAYER_SIZE = 30;
 
         //enemies and line vars and const:
+        var maxSpeed = 15;
+        var minSpeed = 6;
         var enemyYspeed = 12;
         var enemyYpos = 0;
         var enemyXpos = 0;
@@ -64,21 +66,31 @@
         var totalLines = 40;
 
         //prompts
-        //var difficulty = prompt("Select the difficulty", "easy, medium or hard");
-        var userName = '';
+        var difficulty = ''; // difficulty 
+        var difficultyPass = false;
+        while (difficultyPass == false) {
+            difficulty = prompt("Select the difficulty", "easy");
+            if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
+                difficultyPass = true; // runs the text by the user and if it is compatable runs the statement as true 
+            }
+        }
+
+
+        var userName = ''; //username text, so the player can customise their names. 
         var userPass = false;
-        while(userPass == false){
+        while (userPass == false) {
             userName = prompt("Please enter your userName, max length 10", "player");
-            if(userName != null && userName != ''){
-                if(userName.length <= 10){
-                   userPass = true;
+            if (userName != null && userName != '') {
+                if (userName.length <= 10) { // if statement limits the username size to 10 and under so the end screen is not too big
+                    userPass = true;
                 }
-            }  
+            }
         }
         //var textLimit = 10;
         var score = 0;
         var death = 0;
         var gameRun = true;
+        var gameSpeed = ''; // difficulty
 
 
 
@@ -91,15 +103,19 @@
                 colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
 
                 colorText('score:' + score, 5, 20, '20px Arial', 'white');
-                colorText('Deaths:' + death, canvas.width - 100, 20, '20px Arial', 'red');
-                
-                if (userName > 10){ 
+                //colorText('Deaths:' + death, canvas.width - 100, 20, '20px Arial', 'red');
+
+                if (userName > 10) { //limits the username to 10 characters
                     userName == false;
-                
+
+                }
+
+                if (difficulty != 'easy', 'medium', 'hard') { //runs the false statement so that unrecognised text is rejected 
+                    difficultyPass == false;
                 }
 
 
-                
+
 
                 if (startingPos) { //starting position of the player
                     for (i = 0; i < totalEnemies; i++) { //for loop
@@ -109,27 +125,28 @@
 
                     for (i = 0; i < totalLines; i++) {
                         makeLine();
+
                     }
 
                     startingPos = false;
-                    }
-                
+                }
+
                 if (death >= 10) { //
                     gameRun = false;
-                    }
-                
+                }
+
                 playerMove();
                 enemyMove();
                 drawEnemy();
                 lineMove();
-               
 
-                //            makeLine();
+
+                // makeLine();
 
             } // if gameRun end
             else {
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                colorText(userName+' your score was ' + score, 5, canvas.height / 2, '25px Arial', 'white');
+                colorText(userName + ' your score was ' + score, 5, canvas.height / 2, '25px ', 'white');
             }
 
         } //function mainloop end of func
@@ -199,8 +216,6 @@
 
                 if (line.lineYpos > canvas.height) {
                     line.lineYpos = 0 - line.LINE_HEIGHT - line.LINE_HEIGHT * 0.6;
-                    //                line.lineXpos = canvas.width - line.LINE_WIDTH;
-                    //                line.lineYspeed
                 }
             });
 
@@ -213,7 +228,7 @@
 
         function makeLine() { // function that creates lines
             var grassGap = 83;
-            var linePos = Math.floor(Math.random() * 3) + 1;; // fix this so it is not random
+            var linePos = Math.floor(Math.random() * 3) + 1;;
             const LINE_HEIGHT = 40;
             const LINE_WIDTH = 5;
             const LINE_GAP = 55;
@@ -259,10 +274,6 @@
         } // drawLine end of func
 
 
-
-
-
-
         function enemyMove() { //enemy movement and speed 
             enemies.forEach(function(enemy, i, ) {
 
@@ -271,14 +282,32 @@
                 if (enemy.enemyYpos > canvas.height) { // enmey out bottom
                     enemy.enemyYpos = 0 - enemy.ENEMY_SIZE; // enemy at the top
                     enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
-                    enemy.enemyYspeed = Math.floor(Math.random() * (6 - 4) + 2);
+
+                    score++;
+
+                } //        Difficulties for easy medium and hard
+                if (difficulty == 'easy') {
+                    maxSpeed = 10;
+                    minSpeed = 6
                 }
+                if (difficulty == 'medium') {
+
+                    maxSpeed = 12;
+                    minSpeed = 8
+                }
+                if (difficulty == 'hard') {
+
+                    maxSpeed = 14;
+                    minSpeed = 10
+                }
+
+
                 //enemy and player collision, once player hits enemy returns player to the startPos
                 if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
                     console.log('hit');
                     startPos();
                     gameRun = false;
-                    death++;
+                    //death++;
 
 
 
@@ -294,7 +323,7 @@
             //var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE))
             var enemyXpos = enemyPos * (canvas.width / 3); //  puts up to 4 enemies in these 3 postions
             var enemyYpos = 0 - ENEMY_SIZE;
-            var enemyYspeed = Math.floor(Math.random() * (6 - 4) + 2);
+            var enemyYspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 2);
 
 
             var enemy = { //object statement, then put in vars from makeEnemy func
@@ -316,12 +345,6 @@
                 colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, 'red');
             });
         }
-
-
-
-
-
-
 
 
         // Draw car function: colour, size etc.
