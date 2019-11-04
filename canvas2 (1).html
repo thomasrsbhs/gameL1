@@ -28,10 +28,14 @@
         var playerXpos = 0;
         var playerYpos = 0;
         const PLAYER_SIZE = 30;
+        var pcarXpos = 0; 
+        var pcarYpos = 0;
+        var pcarXspeed = 3.3;
+        var parYspeed = 5;
 
         //enemies and line vars and const:
-        var maxSpeed = 15;
-        var minSpeed = 6;
+        var maxSpeed = 15; // difficulty
+        var minSpeed = 6; // difficulty
         var enemyYspeed = 12;
         var enemyYpos = 0;
         var enemyXpos = 0;
@@ -70,8 +74,8 @@
         var difficultyPass = false;
         while (difficultyPass == false) {
             difficulty = prompt("Select the difficulty", "easy");
-            if(difficulty == null){
-               difficulty = ''
+            if (difficulty == null) {
+                difficulty = ''
             }
             if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
                 difficultyPass = true; // runs the text by the user and if it is compatable runs the statement as true 
@@ -93,7 +97,9 @@
         var score = 0;
         var death = 0;
         var gameRun = true;
-        var gameSpeed = ''; // difficulty
+
+        var pcar = new Image(); // player car
+        pcar.src = 'images/pcar.png'; // player car sprite source
 
 
 
@@ -101,10 +107,9 @@
             if (gameRun) {
 
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                drawLine();
-
+               // drawImg(pcar, pcarXpos, pcarYpos, 84, 86,); //player drawn
                 colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
-
+                //colorText('difficulty:' easy, 5, 20, '20px Arial', 'white');
                 colorText('score:' + score, 5, 20, '20px Arial', 'white');
                 //colorText('Deaths:' + death, canvas.width - 100, 20, '20px Arial', 'red');
 
@@ -116,9 +121,6 @@
                 if (difficulty != 'easy', 'medium', 'hard') { //runs the false statement so that unrecognised text is rejected 
                     difficultyPass == false;
                 }
-
-
-
 
                 if (startingPos) { //starting position of the player
                     for (i = 0; i < totalEnemies; i++) { //for loop
@@ -142,6 +144,7 @@
                 enemyMove();
                 drawEnemy();
                 lineMove();
+                drawLine();
 
 
                 // makeLine();
@@ -231,7 +234,7 @@
 
         function makeLine() { // function that creates lines
             var grassGap = 83;
-            var linePos = Math.floor(Math.random() * 3) + 1;;
+            var linePos = Math.floor(Math.random() * 3) + 1;
             const LINE_HEIGHT = 40;
             const LINE_WIDTH = 5;
             const LINE_GAP = 55;
@@ -285,6 +288,7 @@
                 if (enemy.enemyYpos > canvas.height) { // enmey out bottom
                     enemy.enemyYpos = 0 - enemy.ENEMY_SIZE; // enemy at the top
                     enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
+                    enemy.enemyYspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 2)
 
                     score++;
 
@@ -303,6 +307,20 @@
                     maxSpeed = 14;
                     minSpeed = 10
                 }
+
+                function manageTraffic() {
+                    enemies.forEach(function(enemy, i, ) {
+                        const LINE_GAP = 55;
+                        var enemyPos = Math.floor(Math.random() * 3) + 1; //  num of enemies spawning
+                        var lineXpos = 0;
+
+                        if (enemy.enemyXpos += line.lineXpos) {
+                            enemy.enemyPos = line.LINE_GAP / 2;
+                        }
+                    });
+
+                } // manageTraffic end of func
+
 
 
                 //enemy and player collision, once player hits enemy returns player to the startPos
@@ -363,9 +381,14 @@
 
         } // colorText end of func
 
-        // function displays the player
+        // function displays the player 
         function drawImage(img, x, y, w, h) {
             canvasContext.drawImage(x, y, w, h);
+        }
+
+
+        function drawImg(src, x, y, w, h) {
+            canvasContext.drawImage(src, x, y, w, h);
         }
 
     </script>
