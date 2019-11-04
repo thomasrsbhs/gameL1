@@ -107,7 +107,7 @@
             if (gameRun) {
 
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-               // drawImg(pcar, pcarXpos, pcarYpos, 84, 86,); //player drawn
+                //drawImg(pcar, pcarXpos, carYpos, 84, 86,); //player drawn
                 colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
                 //colorText('difficulty:' easy, 5, 20, '20px Arial', 'white');
                 colorText('score:' + score, 5, 20, '20px Arial', 'white');
@@ -152,7 +152,7 @@
             } // if gameRun end
             else {
                 colorRect(0, 0, canvas.width, canvas.height, 'black');
-                colorText(userName + ' your score was ' + score, 5, canvas.height / 2, '25px ', 'white');
+                colorText(' Game over ' + userName + ' your score was ' + score, 30, canvas.height / 2, '25px ', 'white');
             }
 
         } //function mainloop end of func
