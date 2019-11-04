@@ -70,6 +70,9 @@
         var difficultyPass = false;
         while (difficultyPass == false) {
             difficulty = prompt("Select the difficulty", "easy");
+            if(difficulty == null){
+               difficulty = ''
+            }
             if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
                 difficultyPass = true; // runs the text by the user and if it is compatable runs the statement as true 
             }
