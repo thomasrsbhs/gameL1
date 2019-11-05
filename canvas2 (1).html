@@ -8,7 +8,7 @@
 <body>
 
     <canvas id="gameCanvas" width="400" height="400"></canvas>
-    <p>Use the arrow keys to move</p>
+    <h1>Use the arrow keys to move</h1>
     <script>
         var canvas, canvasContext;
 
@@ -356,8 +356,8 @@
                 //enemy and player collision, once player hits enemy returns player to the startPos
                 if (enemy.enemyYpos + enemy.ENEMY_YSIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_XSIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
                     console.log('hit');
-                    startPos();
                     gameRun = false;
+                    startPos();
                     //death++;
 
 
