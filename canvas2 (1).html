@@ -78,8 +78,8 @@
         var startingPos = true;
         var enemies = []; //empty enemy array
         var lines = []; //empty line array
-        var totalEnemies = 4;
         var totalLines = 40;
+        var totalEnemies = 4;
 
         //prompts
         var difficulty = ''; // difficulty 
@@ -92,6 +92,12 @@
             if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
                 difficultyPass = true; // runs the text by the user and if it is compatable runs the statement as true 
             }
+        }
+        
+        if(difficulty.toLowerCase() == 'easy'){
+            totalEnemies = 4;
+        } else {
+            totalEnemies = 6;
         }
 
 
@@ -159,6 +165,8 @@
                 enemyMove();
                 drawEnemy();
                 lineMove();
+                
+               
 
                 drawImg(pcar, playerXpos, playerYpos, PLAYER_XSIZE, PLAYER_YSIZE); //player drawn
                  //enemy drawn
@@ -174,8 +182,8 @@
         } //function mainloop end of func
 
         function startPos() { //startpos of the player
-            playerXpos = canvas.width / 2 - PCAR_SIZE / 2;
-            playerYpos = canvas.height - PCAR_SIZE * 2;
+            playerXpos = canvas.width / 2 - PLAYER_XSIZE / 2;
+            playerYpos = canvas.height - PLAYER_YSIZE * 2;
         } //startpos end of func
 
         function keyPressed(evt) { //Function registers when an arrow key is pressed and makes it run as true
