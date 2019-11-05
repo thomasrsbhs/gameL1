@@ -2,10 +2,13 @@
 
 <head>
     <title>game</title>
+    <h1>Dodge the cars!</h1>
 </head>
 
 <body>
+
     <canvas id="gameCanvas" width="400" height="400"></canvas>
+    <p>Use the arrow keys to move</p>
     <script>
         var canvas, canvasContext;
 
@@ -16,27 +19,47 @@
             document.addEventListener('keydown', keyPressed);
             document.addEventListener('keyup', keyReleased);
 
-            setInterval(mainloop, 1000 / 60);
+            setInterval(mainloop, 1000 / 60); // Runs the code 60 times a second  
         }
 
         //player vars: (speeds and appearences, const for permanent functions) 
-        var playerXspeed = 6;
-        var playerYspeed = 6;
+        var playerXspeed = 10;
+        var playerYspeed = 10;
         var playerXpos = 0;
         var playerYpos = 0;
         const PLAYER_SIZE = 30;
+        
+        var playerXpos = 0;
+        var playerYpos = 0;
+        var pcarXspeed = 3.3;
+        var pcarYspeed = 5;
+        const PLAYER_XSIZE = 40;
+        const PLAYER_YSIZE = 50;
+        const PCAR_SIZE = 30;
+        
 
         //enemies and line vars and const:
+        var maxSpeed = 15; // difficulty
+        var minSpeed = 6; // difficulty
         var enemyYspeed = 12;
         var enemyYpos = 0;
         var enemyXpos = 0;
         var enemyCount = 0;
-        const ENEMY_SIZE = 30;
-        var lineYspeed = 0;
+        const ENEMY_SIZE = 50; 
+        const ENEMY_WIDTH = 40;
+        const ENEMY_HEIGHT = 45;
+        
+        
+        
+        
+        // line vars and consts:
+        var lineYspeed = 6;
         var lineXpos = 0;
         var lineYpos = 0;
-        var lineSize = 5;
-        
+        const LINE_WIDTH = 5;
+        const LINE_HEIGHT = 40;
+        const LINE_SIZE = 5;
+
 
         //constants and variables for key controls
         const LEFT_KEY = 37;
@@ -47,41 +70,121 @@
         var rightKeyPressed = false;
         var upKeyPressed = false;
         var downKeyPressed = false;
+        var grassGap = 83;
+        var lineTotal = 4;
+        var lineCount = 0;
 
-        //game rules/functions
+        //arrays 
         var startingPos = true;
-        var enemies = []; //empty array
-        var totalEnemies = 2;
+        var enemies = []; //empty enemy array
+        var lines = []; //empty line array
+        var totalLines = 40;
+        var totalEnemies = 4;
+
+        //prompts
+        var difficulty = ''; // difficulty 
+        var difficultyPass = false;
+        while (difficultyPass == false) {
+            difficulty = prompt("Select the difficulty", "easy");
+            if (difficulty == null) {
+                difficulty = ''
+            }
+            if (difficulty.toLowerCase() == 'easy' || difficulty.toLowerCase() == 'medium' || difficulty.toLowerCase() == 'hard') {
+                difficultyPass = true; // runs the text by the user and if it is compatable runs the statement as true 
+            }
+        }
+        
+     /*   if(difficulty.toLowerCase() == 'easy'){ // changes enemy amounts based on difficulty (branch more enemies)
+            totalEnemies = 4;
+        } else {
+            totalEnemies = 6;
+       }
+        */
+
+
+        var userName = ''; //username text, so the player can customise their names. 
+        var userPass = false;
+        while (userPass == false) {
+            userName = prompt("Please enter your userName, max length 10", "player");
+            if (userName != null && userName != '') {
+                if (userName.length <= 10) { // if statement limits the username size to 10 and under so the end screen is not too big
+                    userPass = true;
+                }
+            }
+        }
+        //var textLimit = 10;
+        var score = 0;
+        var death = 0;
+        var gameRun = true;
+
+        var pcar = new Image(); // player car
+        pcar.src = 'images/pcar.png'; // player car sprite source
+
+        var ecar = new Image(); // enemy car
+        ecar.src = 'images/ecar.png'; // enemy car sprite source
+
+
 
         function mainloop() { //main function that loops all functions permanently
-            colorRect(0, 0, canvas.width, canvas.height, 'black');
-            
-            colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player
-            
-            colorRect(enemyXpos, enemyYpos, ENEMY_SIZE, ENEMY_SIZE, 'red'); //enemy
-            
-            colorRect(lineXpos, lineYpos, lineSize, lineSize, 'white'); //lines
+            if (gameRun) {
 
-            
-            if (startingPos) { //starting position of the player
-                for (i = 0; i < totalEnemies; i++) { //for loop
-                    startPos();
-                    makeEnemy();
+                colorRect(0, 0, canvas.width, canvas.height, 'black');
+                //colorRect(playerXpos, playerYpos, PLAYER_SIZE, PLAYER_SIZE, 'yellow'); //player drawn
+                //colorText('difficulty:' easy, 5, 20, '20px Arial', 'white');
+                colorText('score:' + score, 5, 20, '20px Arial', 'white');
+               
+
+                if (userName > 10) { //limits the username to 10 characters
+                    userName == false;
+
                 }
 
-                startingPos = false;
+                if (difficulty != 'easy', 'medium', 'hard') { //runs the false statement so that unrecognised text is rejected 
+                    difficultyPass == false;
+                }
+
+                if (startingPos) { //starting position of the player
+                    for (i = 0; i < totalEnemies; i++) { //for loop
+                        startPos();
+                        makeEnemy();
+                    }
+
+                    for (i = 0; i < totalLines; i++) {
+                        makeLine();
+
+                    }
+
+                    startingPos = false;
+                }
+
+                if (death >= 10) { //
+                    gameRun = false;
+                }
+
+                drawLine();
+                playerMove();
+                enemyMove();
+                drawEnemy();
+                lineMove();
+                
+               
+
+                drawImg(pcar, playerXpos, playerYpos, PLAYER_XSIZE, PLAYER_YSIZE); //player drawn
+                 //enemy drawn
+
+                // makeLine();
+
+            } // if gameRun end
+            else {
+                colorRect(0, 0, canvas.width, canvas.height, 'black');
+                colorText(' Game over ' + userName + ' your score was ' + score, 30, canvas.height / 2, '25px ', 'white');
             }
-            
-            playerMove();
-            enemyMove();
-            drawEnemy();
-            
-           
+
         } //function mainloop end of func
 
         function startPos() { //startpos of the player
-            playerXpos = canvas.width / 2 - PLAYER_SIZE / 2;
-            playerYpos = canvas.height - PLAYER_SIZE * 2;
+            playerXpos = canvas.width / 2 - PLAYER_XSIZE / 2;
+            playerYpos = canvas.height - PLAYER_YSIZE * 2;
         } //startpos end of func
 
         function keyPressed(evt) { //Function registers when an arrow key is pressed and makes it run as true
@@ -119,82 +222,182 @@
 
         // Car movement, causes the player to move left, right, up and down after a key is pressed.
         function playerMove() {
-            if (rightKeyPressed && playerXpos < canvas.width - PLAYER_SIZE) {
-                playerXpos += playerXspeed; // x move right, right bounce
-                console.log(playerXspeed + ':' + playerXpos)
+            
+            const PLAYER_XSIZE = 40;
+            const PLAYER_YSIZE = 40;
+            
+            if (rightKeyPressed && playerXpos < canvas.width - PLAYER_XSIZE) {
+                playerXpos += pcarXspeed; // x move right, right bounce
+                console.log(pcarXspeed + ':' + playerXpos)
             }
             if (leftKeyPressed && playerXpos > 0) {
-                playerXpos -= playerXspeed; // x move left, left bounce 
+                playerXpos -= pcarXspeed; // x move left, left bounce 
             }
             if (upKeyPressed && playerYpos > 0) {
-                playerYpos -= playerYspeed; //positive y move (up) top bounce
+                playerYpos -= pcarYspeed/2; //positive y move (up) top bounce
 
             }
-            if (downKeyPressed && playerYpos < canvas.height - PLAYER_SIZE) {
-                playerYpos += playerYspeed; // negative y move (down) and  bottom bounce
+            if (downKeyPressed && playerYpos < canvas.height - PLAYER_YSIZE) {
+                playerYpos += pcarYspeed; // negative y move (down) and  bottom bounce
             }
 
 
         } //function playerMove end of func
 
+        function lineMove() { // Line movement and speed, moves down Y
+            lines.forEach(function(line, i, ) {
 
-        //enemy movement and speed 
-        function enemyMove() {
-            enemies.forEach(function(enemy){
-            
+                line.lineYpos += line.lineYspeed
+
+                if (line.lineYpos > canvas.height) {
+                    line.lineYpos = 0 - line.LINE_HEIGHT - line.LINE_HEIGHT * 0.6;
+                }
+            });
+
+        } //linemove end of func 
+
+
+
+
+        var lineRowCount = 0;
+
+        function makeLine() { // function that creates lines
+            var grassGap = 83;
+            var linePos = Math.floor(Math.random() * 3) + 1;
+            const LINE_HEIGHT = 40;
+            const LINE_WIDTH = 5;
+            const LINE_GAP = 55;
+            const LINE_H_GAP = 20;
+            var lineXpos = grassGap * (lineCount % 5 + 1);
+            //var lineXpos = linePos * (canvas.width / 5); // puts 5 lines into 5 positions 
+            var lineYpos = 0
+
+            if (lineCount % 5 == 0 && lineCount != 0) {
+                lineRowCount++;
+                lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
+            } else {
+                lineYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
+            }
+            //var lineYpos = 0 - LINE_HEIGHT;
+            var lineYspeed = 5;
+            lineCount++;
+
+
+            var line = { // line array
+                lineXpos: lineXpos,
+                lineYpos: lineYpos,
+                LINE_WIDTH: LINE_WIDTH,
+                LINE_HEIGHT: LINE_HEIGHT,
+                lineYspeed: lineYspeed
+
+            }
+
+            lines.push(line); // array for lines, pushes var line info into an array
+
+        } // makeLine end of func
+
+        function drawLine() {
+            lines.forEach(function(line, i, ) {
+                colorRect(line.lineXpos, line.lineYpos, line.LINE_WIDTH, line.LINE_HEIGHT, 'white');
+                if (line.lineYpos > canvas.height) {
+                    line.lineYpos = 0 - line.LINE_HEIGHT;
+                }
+            });
+
+
+
+        } // drawLine end of func
+
+
+        function enemyMove() { //enemy movement and speed 
+            enemies.forEach(function(enemy, i, ) {
+
                 enemy.enemyYpos += enemy.enemyYspeed;
 
-            if (enemy.enemyYpos > canvas.height) { // enmey out bottom
-                enemy.enemyYpos = 0 - enemy.ENEMY_SIZE; // enemy at the top
-                enemy.enemyXpos = Math.floor(Math.random() * (canvas.width - enemy.ENEMY_SIZE));
-                enemy.enemyYspeed = Math.floor(Math.random() * (15 - 6) + 4);
-            }
-            //enemy and player collision, once player hits enemy returns player to the startPos
-            if (enemy.enemyYpos + enemy.ENEMY_SIZE > playerYpos && enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_SIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
-                console.log('hit');
-                startPos();
+                if (enemy.enemyYpos > canvas.height) { // enmey out bottom
+                     var enemyPos = Math.floor(Math.random() * 5); //  num of enemies spawning
+
+                    enemy.enemyYpos = 0 - enemy.ENEMY_YSIZE; // enemy at the top
+                    enemy.enemyXpos = enemyPos * (enemy.ENEMY_XSIZE * 2) + enemy.ENEMY_XSIZE / 2;
+                    enemy.enemyYspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 2)
+
+                    score++; // scoring 
+
+                } //  Difficulties for easy, medium and hard
+                if (difficulty == 'easy') {
+                    maxSpeed = 12;
+                    minSpeed = 8;
+                }
+                if (difficulty == 'medium') {
+                    maxSpeed = 14;
+                    minSpeed = 10;
+                }
+                if (difficulty == 'hard') {
+                    maxSpeed = 30;
+                    minSpeed = 20;
+                }
+
+//                function manageTraffic() {
+//                    enemies.forEach(function(enemy, i, ) {
+//                        const LINE_GAP = 55;
+//                        var enemyPos = Math.floor(Math.random() * 3) + 1; //  num of enemies spawning
+//                        var lineXpos = 0;
+//
+//                        if (enemy.enemyXpos += line.lineXpos) {
+//                            enemy.enemyPos = line.LINE_GAP / 2;
+//                            enemy.enemyYpos = lineRowCount - (lineRowCount * (LINE_HEIGHT + LINE_H_GAP));
+//                        }
+//                    });
+//
+//                } // manageTraffic end of func
 
 
-            } //enemyMove end of func
-        });
+
+                //enemy and player collision, once player hits enemy returns player to the startPos
+                if (enemy.enemyYpos + enemy.ENEMY_YSIZE > playerYpos && enemy.enemyYpos < playerYpos + PLAYER_SIZE && enemy.enemyXpos + enemy.ENEMY_XSIZE > playerXpos && enemy.enemyXpos < playerXpos + PLAYER_SIZE) {
+                    console.log('hit');
+                    startPos();
+                    gameRun = false;
+                    //death++;
+
+
+
+                } //enemyMove end of func
+            });
 
         }
         //places enemies in set locations on the canvas and spawns them randomly
         function makeEnemy() {
-            var enemyPos = Math.floor(Math.random() * 3) + 1; //  num of enemies spawning
-            
-        const ENEMY_SIZE = 30;
-        //var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE))
-        var enemyXpos = enemyPos * (canvas.width / 2); //  puts up to 3 enemies in these 3 postions
-        var enemyYpos = 0 - ENEMY_SIZE;
-        var enemyYspeed = Math.floor(Math.random() * (8 - 6) + 4);
+            var enemyPos = Math.floor(Math.random() * 5); //  num of enemies spawning
+
+            const ENEMY_XSIZE = 40;
+            const ENEMY_YSIZE = 50;
+            //var enemyXpos = Math.floor(Math.random() * (canvas.width - ENEMY_SIZE))
+            var enemyXpos = enemyXpos = enemyPos * (ENEMY_XSIZE * 2) + ENEMY_XSIZE / 2;; //  puts up to 4 enemies in these 3 postions
+            var enemyYpos = Math.floor(Math.random() * (ENEMY_YSIZE * 4)) * -1;
+            var enemyYspeed = Math.floor(Math.random() * (maxSpeed - minSpeed) + 2);
 
 
-        var enemy = { //object statement, then put in vars from makeEnemy func
-            enemyXpos: enemyXpos,
-            enemyYpos: enemyYpos,
-            ENEMY_SIZE: ENEMY_SIZE,
-            enemyYspeed: enemyYspeed
+            var enemy = { //object statement, then put in vars from makeEnemy func
+                enemyXpos: enemyXpos,
+                enemyYpos: enemyYpos,
+                ENEMY_XSIZE: ENEMY_XSIZE,
+                ENEMY_YSIZE: ENEMY_YSIZE,
+                enemyYspeed: enemyYspeed
+
+            }
+
+            enemies.push(enemy); // array function pushes var enemy = { info into an array
+
+
 
         }
 
-        enemies.push(enemy); // array function pushes var enemy = { info into an array
-
-
-
-        }
-        
         function drawEnemy() { //draws the multiple enemies on the screen through a for loop
-            enemies.forEach(function(enemy, i, ){
-                colorRect(enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_SIZE, enemy.ENEMY_SIZE, 'red');
+            enemies.forEach(function(enemy, i, ) {
+                drawImg(ecar, enemy.enemyXpos, enemy.enemyYpos, enemy.ENEMY_XSIZE, enemy.ENEMY_YSIZE);
             });
         }
-
-        
-
-
-
-
 
 
         // Draw car function: colour, size etc.
@@ -202,9 +405,22 @@
             canvasContext.fillStyle = c;
             canvasContext.fillRect(x, y, w, h);
         }
-        // function displays the player
+
+        function colorText(msg, x, y, f, c) { //writes text on game over, wrtes score and deaths on mainloop
+            canvasContext.fillStyle = c;
+            canvasContext.font = f;
+            canvasContext.fillText(msg, x, y);
+
+        } // colorText end of func
+
+        // function displays the player 
         function drawImage(img, x, y, w, h) {
             canvasContext.drawImage(x, y, w, h);
+        }
+
+
+        function drawImg(src, x, y, w, h) {
+            canvasContext.drawImage(src, x, y, w, h);
         }
 
     </script>
